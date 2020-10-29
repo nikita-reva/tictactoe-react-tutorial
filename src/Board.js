@@ -3,10 +3,17 @@ import Square from './Square';
 
 class Board extends React.Component {
 	renderSquare(i) {
-		return (
+        const winLines = this.props.winLines;
+        let color = {backgroundColor: "white"};
+        if(winLines !== null && winLines.includes(i)) {
+            color = {backgroundColor: "green"}
+        }
+        
+        return (
 		<Square 
-			value={this.props.squares[i]} 
+			value={this.props.squares[i]}
 			onClick={() => this.props.onClick(i)}
+            color={color}
 			/>
 		);
     }
@@ -15,12 +22,12 @@ class Board extends React.Component {
         let board = [];
         for(let r = 0; r < 3; r++) {
             let squares = [];
-            for(let c = 0 + r * 3; c < 3 + r * 3; c++) {
-                squares.push(this.renderSquare(c));
+            for(let c = 0; c < 3; c++) {
+                squares.push(this.renderSquare(c+3*r));
             }
             board.push(<div key={r} className="board-row">{squares}</div>);
         }
-        console.log(board);
+        console.log(this.props.winLines);
         return board;
     }
     

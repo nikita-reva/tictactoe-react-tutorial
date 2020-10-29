@@ -13,6 +13,8 @@ class Game extends React.Component {
 			}],
 			stepNumber: 0,
 			xIsNext: true,
+			reversed: false,
+			winLines: Array(3).fill(null),
 		}
 	}
 
@@ -31,6 +33,7 @@ class Game extends React.Component {
 					lastClicked: i,
 				}
 			]),
+			
 			stepNumber: history.length,
 			xIsNext: !this.state.xIsNext,
 			});
@@ -42,11 +45,28 @@ class Game extends React.Component {
 			xIsNext: (stepNr % 2) === 0,
 		});
 	}
+
+	sortMoves() {
+		if(!this.state.reversed) {
+			this.setState({
+				reversed: true,
+			})
+		} else {
+			this.setState({
+				reversed: false,
+			})
+		}
+	}
 	
 	render() {
 		const history = this.state.history;
 		const current = history[this.state.stepNumber];
 		const winner = calculateWinner(current.squares);
+		const winLines = getWinLines(current.squares);
+		const buttonSort = <button onClick={() => {this.sortMoves()}}>Sort moves</button>;
+		const reversed = this.state.reversed;
+		const order = reversed ? 'reversed' : '';
+
 
 		const moves = history.map((step, move) => {
 			const position = getPosition(step.lastClicked)
@@ -76,11 +96,13 @@ class Game extends React.Component {
 					<Board 
 						squares={current.squares}
 						onClick={(i) => this.handleClick(i)}
+						winLines={winLines}
 					/>
 				</div>
 				<div className="game-info">
 					<div>{status}</div>
-					<ol>{moves}</ol>
+					<div>{buttonSort}</div>
+					<ol reversed={order}>{moves}</ol>
 				</div>
 			</div>
 		);
@@ -105,6 +127,26 @@ function calculateWinner(squares) {
 	  	const [a, b, c] = lines[i];
 	  	if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
 			return squares[a];
+	  	}
+	}
+	return null;
+}
+
+function getWinLines(squares) {
+	const lines = [
+		[0, 1, 2],
+	  	[3, 4, 5],
+		[6, 7, 8],
+		[0, 3, 6],
+		[1, 4, 7],
+		[2, 5, 8],
+		[0, 4, 8],
+		[2, 4, 6],
+	];
+	for (let i = 0; i < lines.length; i++) {
+	  	const [a, b, c] = lines[i];
+	  	if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+			return lines[i]
 	  	}
 	}
 	return null;
