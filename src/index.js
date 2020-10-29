@@ -63,12 +63,8 @@ class Game extends React.Component {
 		const current = history[this.state.stepNumber];
 		const winner = calculateWinner(current.squares);
 		const winLines = getWinLines(current.squares);
-		const buttonSort = <button onClick={() => {this.sortMoves()}}>Sort moves</button>;
-		const reversed = this.state.reversed;
-		const order = reversed ? 'reversed' : '';
 
-
-		const moves = history.map((step, move) => {
+		let moves = history.map((step, move) => {
 			const position = getPosition(step.lastClicked)
 			const stepNumber = this.state.stepNumber;
 			const buttonClass = stepNumber === move ? "button-selected" : ""; 
@@ -82,6 +78,13 @@ class Game extends React.Component {
 				</li>
 			);
 		});
+		
+		const buttonSort = <button className="button-sort" onClick={() => {this.sortMoves()}}>Sort moves</button>;
+		const reversed = this.state.reversed;
+		const order = reversed ? 'reversed' : '';
+
+		moves = reversed ? moves.reverse() : moves;
+
 
 		let status;
 
