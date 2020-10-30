@@ -8,7 +8,7 @@ class Board extends React.Component {
         if(winLines !== null && winLines.includes(i)) {
             color = {backgroundColor: "green"}
         }
-        
+
         return (
 		<Square 
 			value={this.props.squares[i]}
@@ -27,7 +27,6 @@ class Board extends React.Component {
             }
             board.push(<div key={r} className="board-row">{squares}</div>);
         }
-        console.log(this.props.winLines);
         return board;
     }
     
