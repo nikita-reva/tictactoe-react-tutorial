@@ -22,7 +22,7 @@ class Game extends React.Component {
 		const history = this.state.history.slice(0, this.state.stepNumber + 1);
 		const current = history[history.length - 1];
 		const squares = current.squares.slice();
-		if(calculateWinner(squares) || squares[i]) {
+		if(calculateWinner(getWinLines(squares), squares) || squares[i]) {
 			return;
 		}
 		squares[i] = this.state.xIsNext ? 'X' : 'O';
@@ -61,8 +61,8 @@ class Game extends React.Component {
 	render() {
 		const history = this.state.history;
 		const current = history[this.state.stepNumber];
-		const winner = calculateWinner(current.squares);
 		const winLines = getWinLines(current.squares);
+		const winner = calculateWinner(winLines, current.squares);
 
 		let moves = history.map((step, move) => {
 			const position = getPosition(step.lastClicked)
@@ -78,10 +78,11 @@ class Game extends React.Component {
 				</li>
 			);
 		});
-		
-		const buttonSort = <button className="button-sort" onClick={() => {this.sortMoves()}}>Sort moves</button>;
+
 		const reversed = this.state.reversed;
-		const order = reversed ? 'reversed' : '';
+		const order = reversed ? 'ascending' : 'descending';
+		const olReversed = reversed ? 'reversed' : '';
+		const buttonSort = <button className="button-sort" onClick={() => {this.sortMoves()}}>{'Sort in ' + order + ' order'}</button>;
 
 		moves = reversed ? moves.reverse() : moves;
 
@@ -113,7 +114,7 @@ class Game extends React.Component {
 				<div className="game-info">
 					<div>{status}</div>
 					<div>{buttonSort}</div>
-					<ol reversed={order}>{moves}</ol>
+					<ol reversed={olReversed}>{moves}</ol>
 				</div>
 			</div>
 		);
@@ -123,24 +124,12 @@ class Game extends React.Component {
 ReactDOM.render(<Game />, document.getElementById('root'));
 // ========================================
 
-function calculateWinner(squares) {
-	const lines = [
-		[0, 1, 2],
-	  	[3, 4, 5],
-		[6, 7, 8],
-		[0, 3, 6],
-		[1, 4, 7],
-		[2, 5, 8],
-		[0, 4, 8],
-		[2, 4, 6],
-	];
-	for (let i = 0; i < lines.length; i++) {
-	  	const [a, b, c] = lines[i];
-	  	if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-			return squares[a];
-	  	}
+function calculateWinner(winLines, squares) {
+	let winner = null;
+	if(winLines !== null) {
+		return winner = squares[winLines[0]];
 	}
-	return null;
+	return winner = null;
 }
 
 function getWinLines(squares) {
