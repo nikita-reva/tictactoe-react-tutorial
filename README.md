@@ -1,6 +1,10 @@
 Published on GitHub Pages at:
 https://nikita-reva.github.io/tictactoe-react-tutorial/
 
+This little project is based on the tutorial from the official React website:
+https://reactjs.org/tutorial/tutorial.html
+
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
